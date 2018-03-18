@@ -1,0 +1,9 @@
+forge "https://forgeapi.puppetlabs.com"
+
+ mod "puppet/archive", "2.3.0"
+ mod "puppetlabs/apt", "4.5.1"
+ mod "puppetlabs/java", "2.4.0"
+ mod "puppetlabs/stdlib", "4.24.0"
+ mod "puppetlabs/apache", "3.0.0"
+ mod "darin/zypprepo", "1.0.2"
+#mod "rtyler/jenkins", "1.7.0"
