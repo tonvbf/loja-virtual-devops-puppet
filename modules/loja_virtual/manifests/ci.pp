@@ -55,7 +55,7 @@ class loja_virtual::ci inherits loja_virtual {
     notify  => Service['jenkins'],
   }
   
-  $git_repository     = 'https://github.com/tonvbf/loja-virtual-devops.git'
+  $git_repository     = 'https://github.com/tonvbf'
   $git_poll_interval  = '* * * * *'
   $maven_goal         = 'install'
   $archive_artifacts  = 'combined/target/*.war'
@@ -63,7 +63,12 @@ class loja_virtual::ci inherits loja_virtual {
   $repo_name          = 'devopspkgs'
   
   jenkins::job { 'loja-virtual-devops':
-    config  => template('loja_virtual/config.xml'),
+    config  => template('loja_virtual/loja-virtual-devops-config.xml'),
+    require => File["${jenkins::params::localstatedir}/hudson.tasks.Maven.xml"],
+  }
+    
+  jenkins::job { 'loja-virtual-puppet':
+    config  => template('loja_virtual/loja-virtual-puppet-config.xml'),
     require => File["${jenkins::params::localstatedir}/hudson.tasks.Maven.xml"],
   }
     
