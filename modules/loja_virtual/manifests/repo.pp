@@ -1,6 +1,6 @@
 class loja_virtual::repo($basedir, $sname) {
 
-  package { 'reprepro':
+  package { ['reprepro', 'gnupg']:
     ensure  =>  'installed',
   }
     
@@ -16,12 +16,41 @@ class loja_virtual::repo($basedir, $sname) {
     require => Class['jenkins'],
   }
     
-  file { "${basedir}/devopspkgs.gpg":
+#  file { "${basedir}/devopspkgs.gpg":
+#    owner   => 'jenkins',
+#    group   => 'jenkins',
+#    source  => 'puppet:///modules/loja_virtual/devopspkgs.gpg',
+#    require => File[$basedir],
+#  }
+
+  file { "${jenkins::params::localstatedir}/${sname}.sec":
     owner   => 'jenkins',
     group   => 'jenkins',
-    source  => 'puppet:///modules/loja_virtual/devopspkgs.gpg',
-    require => File[$basedir],
+    mode    => '0644',
+    source  => "puppet:///modules/loja_virtual/${sname}.sec",
+    require => Package['gnupg'],
   }
+
+  exec { 'import-secret-key':
+    unless  => 'gpg --list-secret-keys "Loja Virtual"',
+    command => "gpg --import ${sname}.sec",
+    path    => '/usr/bin',
+    cwd     => $jenkins::params::localstatedir,
+    user    => 'jenkins',
+    group   => 'jenkins',
+    require => File["${jenkins::params::localstatedir}/${sname}.sec"],
+  }
+    
+  exec { 'export-public-key':
+    command => "gpg --export --armor 'Loja Virtual' > ${basedir}/${sname}.gpg",
+    path    => '/usr/bin',
+    cwd     => $jenkins::params::localstatedir,
+    user    => 'jenkins',
+    group   => 'jenkins',
+    creates => "${basedir}/${sname}.gpg",
+    require => Exec['import-secret-key'],
+  }
+    
 
   file { "${basedir}/conf/distributions":
     owner   => 'jenkins',

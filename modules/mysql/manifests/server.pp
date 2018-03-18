@@ -1,4 +1,4 @@
-# Define: mysql:server
+# Define: mysql::server
 #
 #   Instala e configura um servidor mysql
 #

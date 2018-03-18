@@ -46,7 +46,7 @@ class loja_virtual::ci inherits loja_virtual {
 
   jenkins::plugin { $plugins: }
     
-  File { "${jenkins::params::localstatedir}/hudson.tasks.Maven.xml":
+  file { "${jenkins::params::localstatedir}/hudson.tasks.Maven.xml":
     owner   => 'jenkins',
     group   => 'jenkins',
     mode    => '0644',

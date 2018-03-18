@@ -24,7 +24,7 @@ class loja_virtual::web {
     release  => 'devopspkgs',
     repos    => 'main',
     key      => {
-      id     => '9E5CF485F6CB0D7162E2A9C6700382715EFC59A3',
+      id     => '1F13A90EE68B8AB62AD2CA56A06E8653083EF6D4',
       source => 'http://192.168.33.16/devopspkgs.gpg',
     },
     include  => {
@@ -34,8 +34,9 @@ class loja_virtual::web {
   }
     
   package { 'devopsnapratica':
-    ensure => 'latest',
-    notify => Service['tomcat7'],
+    ensure  => 'latest',
+    require => Apt::Source['devopsnapratica'],
+    notify  => Service['tomcat7'],
   }
 
 #    file { "/var/lib/tomcat7/webapps/devopsnapratica.war":
