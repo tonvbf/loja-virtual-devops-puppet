@@ -3,6 +3,8 @@
 require 'puppet-lint/tasks/puppet-lint'
 
 PuppetLint.configuration.ignore_paths = ["librarian/**/*.pp"]
+PuppetLint.configuration.send('disable_autoloader_layout')
+PuppetLint.configuration.send('disable_documentation')
 
 require 'rspec/core/rake_task'
 TESTED_MODULES = %w(mysql)
