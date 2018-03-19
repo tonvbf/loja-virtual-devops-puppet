@@ -17,27 +17,40 @@ class loja_virtual::ci inherits loja_virtual {
   }
 
   $plugins = [
+    'ant',
+    'antisamy-markup-formatter',
     'apache-httpcomponents-client-4-api',
     'bouncycastle-api',
     'command-launcher',
+    'conditional-buildstep',
+    'copyartifact',
     'display-url-api',
     'durable-task',
+    'external-monitor-job',
     'git',
     'git-client',
     'greenballs',
     'javadoc',
     'jsch',
     'junit',
+    'ldap',
     'mailer',
+    'matrix-auth',
     'matrix-project',
     'maven-plugin',
+    'pam-auth',
+    'parameterized-trigger',
     'resource-disposer',
+    'run-condition',
     'scm-api',
     'script-security',
     'ssh-credentials',
     'structs',
+    'token-macro',
+    'windows-slaves',
     'workflow-api',
     'workflow-durable-task-step',
+    'workflow-job',
     'workflow-scm-step',
     'workflow-step-api',
     'workflow-support',
@@ -69,6 +82,11 @@ class loja_virtual::ci inherits loja_virtual {
     
   jenkins::job { 'loja-virtual-puppet':
     config  => template('loja_virtual/loja-virtual-puppet-config.xml'),
+    require => File["${jenkins::params::localstatedir}/hudson.tasks.Maven.xml"],
+  }
+    
+  jenkins::job { 'deploy-em-producao':
+    config  => template('loja_virtual/deploy-em-producao-config.xml'),
     require => File["${jenkins::params::localstatedir}/hudson.tasks.Maven.xml"],
   }
     

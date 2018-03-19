@@ -28,7 +28,7 @@ class loja_virtual::repo($basedir, $sname) {
     group   => 'jenkins',
     mode    => '0644',
     source  => "puppet:///modules/loja_virtual/${sname}.sec",
-    require => Package['gnupg'],
+    require => [Package['gnupg'], File[$repo_structure]],
   }
 
   exec { 'import-secret-key':
@@ -60,11 +60,17 @@ class loja_virtual::repo($basedir, $sname) {
   }
     
   class { 'apache': }
+  
+  if $facts['networking']['interfaces']['enp0s8']['ip'] {
+    $servername = $facts['networking']['interfaces']['enp0s8']['ip'],
+  } else {
+    $servername = $facts['networking']['interfaces']['eth0']['ip']
+  }
     
   apache::vhost { $sname:
     port       => 80,
     docroot    => $basedir,
-    servername => $facts['networking']['interfaces']['enp0s8']['ip'],
+    servername => $servername,
   }
 
 }
